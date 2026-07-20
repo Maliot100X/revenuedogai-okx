@@ -1,32 +1,4 @@
-export default function Home() {
-  return (
-    <div style={{minHeight:"100vh",background:"#0a0a1a",color:"#e4e4ef",fontFamily:"system-ui,sans-serif",padding:"40px 20px"}}>
-      <div style={{maxWidth:900,margin:"0 auto"}}>
-        <h1 style={{fontSize:42,fontWeight:800,background:"linear-gradient(135deg,#FFD700,#FF6B00)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginBottom:8}}>
-          RevenueDogAi
-        </h1>
-        <p style={{fontSize:18,color:"#888",marginBottom:40}}>AI-Powered Web Research &amp; Browser Automation on OKX.AI</p>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:20,marginBottom:40}}>
-          {[
-            {name:"Deep Web Research",desc:"Multi-site research with structured data extraction",price:"0.01 USDT/call"},
-            {name:"Browser Automation",desc:"Form filling, data extraction, multi-step workflows",price:"0.01 USDT/call"},
-            {name:"Site Change Monitor",desc:"Website change detection with timestamps",price:"0.01 USDT/call"}
-          ].map((s,i)=>(
-            <div key={i} style={{background:"#111",border:"1px solid #333",borderRadius:12,padding:24}}>
-              <h3 style={{color:"#FFD700",fontSize:18,marginBottom:8}}>{s.name}</h3>
-              <p style={{color:"#aaa",fontSize:14,marginBottom:12}}>{s.desc}</p>
-              <span style={{background:"#FFD70022",color:"#FFD700",padding:"4px 12px",borderRadius:6,fontSize:13}}>{s.price}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{background:"#111",border:"1px solid #333",borderRadius:12,padding:24}}>
-          <h2 style={{color:"#FFD700",marginBottom:16}}>API Endpoint</h2>
-          <code style={{display:"block",background:"#1a1a2e",padding:12,borderRadius:8,color:"#4ade80",fontSize:13,marginBottom:12}}>
-            POST https://revenuedogai-okx.vercel.app/api/task
-          </code>
-          <p style={{color:"#888",fontSize:13}}>Agent ID: #6735 | Chain: X Layer | x402 Payment: 0.01 USDT</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+"use client";
+import {FormEvent,useState} from "react";
+const services=[{name:"Deep Web Research",desc:"AI-powered research across multiple sites with structured findings."},{name:"Browser Automation",desc:"Natural-language browser workflows, extraction, and form automation."},{name:"Site Change Monitor",desc:"Track a real website and return timestamped changes."}];
+export default function Home(){const[message,setMessage]=useState("");const[reply,setReply]=useState("");const[busy,setBusy]=useState(false);const[error,setError]=useState("");async function submit(e:FormEvent){e.preventDefault();if(!message.trim()||busy)return;setBusy(true);setReply("");setError("");try{const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Request failed");setReply(d.content);}catch(e){setError(e instanceof Error?e.message:"Request failed");}finally{setBusy(false);}}return <main style={{minHeight:"100vh",background:"radial-gradient(circle at 80% 0%,#2a1800 0,transparent 35%),#080914",color:"#e8e8f2",fontFamily:"Inter,system-ui,sans-serif",padding:"42px 20px"}}><div style={{maxWidth:980,margin:"0 auto"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:20,marginBottom:44}}><div><div style={{color:"#ffbf38",fontSize:12,letterSpacing:3,fontWeight:700}}>OKX.AI AGENT #6735</div><h1 style={{fontSize:48,margin:"8px 0",background:"linear-gradient(100deg,#ffe08a,#ff8a00)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>RevenueDogAi</h1><p style={{color:"#a4a5b5",fontSize:18,margin:0}}>Real web intelligence and browser automation.</p></div><div style={{border:"1px solid #2e934f",color:"#65e58a",borderRadius:999,padding:"9px 15px",fontSize:13,whiteSpace:"nowrap"}}>● ONLINE · 24/7</div></div><section style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16,marginBottom:24}}>{services.map(s=><div key={s.name} style={{background:"rgba(22,24,43,.78)",border:"1px solid rgba(255,255,255,.09)",borderRadius:18,padding:22}}><h2 style={{color:"#ffc857",fontSize:18,margin:"0 0 9px"}}>{s.name}</h2><p style={{color:"#a6a8b7",lineHeight:1.55,minHeight:50,margin:0}}>{s.desc}</p><div style={{color:"#71e09b",fontSize:13,marginTop:16}}>0.01 USD₮0 / call</div></div>)}</section><section style={{background:"rgba(17,19,35,.88)",border:"1px solid rgba(255,255,255,.1)",borderRadius:20,padding:24}}><div style={{color:"#ffbf38",fontSize:12,letterSpacing:2,fontWeight:700,marginBottom:8}}>AGENT CHAT</div><h2 style={{margin:"0 0 8px",fontSize:28}}>Ask RevenueDogAi</h2><p style={{color:"#9295a8",marginTop:0}}>Live gpt-5.4 response through the deployed cloud API.</p><form onSubmit={submit} style={{display:"flex",gap:10,flexWrap:"wrap"}}><input value={message} onChange={e=>setMessage(e.target.value)} placeholder="Ask a research or automation question..." style={{flex:"1 1 520px",minWidth:0,background:"#0b0d1a",border:"1px solid #34374a",color:"white",borderRadius:12,padding:"14px 16px",fontSize:15}}/><button disabled={busy} style={{border:0,borderRadius:12,padding:"0 22px",minHeight:48,fontWeight:800,background:"linear-gradient(100deg,#ffd76b,#ff8a00)",color:"#17100a"}}>{busy?"Thinking...":"Send"}</button></form>{error&&<div style={{color:"#ff8b8b",marginTop:16}}>{error}</div>}{reply&&<div style={{marginTop:20,background:"#0b0d1a",border:"1px solid #34374a",borderRadius:13,padding:18,whiteSpace:"pre-wrap",lineHeight:1.6}}>{reply}</div>}</section><div style={{color:"#777b91",fontSize:12,marginTop:22}}>API: https://revenuedogai-okx.vercel.app/api/task · Chat: /api/chat · X Layer · x402 enabled</div></div></main>}
